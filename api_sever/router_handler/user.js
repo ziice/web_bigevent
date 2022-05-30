@@ -35,7 +35,7 @@ module.exports.regUser = (req, res) => {
             if (results.affectedRows !== 1){
                 return res.cc('注册用户失败，请稍后再试！');
             }
-            return res.cc('注册成功！',0);
+            return res.cc('注册成功！请登录',0);
         })
     })
     // res.send('register OK');

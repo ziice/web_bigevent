@@ -23,15 +23,16 @@ $(function (){
         }
     })
     // 监听注册表单的提交事件
-    let data = {username:$('#form_reg [name=username]').val(),password:$('#form_reg [name=password]').val()};
     $('#form_reg').on('submit',function (e){
         // 阻止默认提交行为
         e.preventDefault();
-        $.post('http://127.0.0.1/api/reguser',data,function (res){
+        let data = {username:$('#form_reg [name=username]').val(),
+                    password:$('#form_reg [name=password]').val()};
+        $.post('/api/reguser',data,function (res){
             if(res.status!==0){
                 return layer.msg(res.message);
             }
-            layer.msg('注册成功，请登录！');
+            layer.msg(res.message);
             $('#link_login').click();
         })
     })
@@ -39,17 +40,18 @@ $(function (){
     $('#form_login').submit(function (e){
         e.preventDefault();
         $.ajax({
-            url:'http://127.0.0.1/api/login',
+            url:'/api/login',
             method:'post',
             data:$(this).serialize(), // 快速获取表单数据
             success:function (res){
                 if(res.status!==0){
                     return layer.msg(res.message);
                 }
-                layer.msg('登录成功！');
+                layer.msg(res.message);
                 // 将登录成功得到的token保存到localStorage中
                 localStorage.setItem('token',res.token);
-                location.href = '../index.html';
+                // location.href = '../../index.html';
+                location.href = 'http://localhost:63342/%E5%A4%A7%E4%BA%8B%E4%BB%B6/index.html';
             }
         })
     })
