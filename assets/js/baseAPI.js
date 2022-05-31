@@ -1,7 +1,7 @@
 // 每次调用$.get()、post()、ajax()时，会调用.ajaxPrefilter函数，在这个函数中，可以拿到我们给ajax提供的配置对象
 $.ajaxPrefilter(function (options){
     // console.log(options.url);
-    options.url = 'http://127.0.0.1'+options.url;
+    options.url = 'http://127.0.0.1' + options.url;
     // 统一为有权限的接口，设置headers请求头
     if(options.url.indexOf('/my')!==-1){
         options.headers = {

@@ -17,7 +17,7 @@ iframe{
     overflow: hidden;
 }
 a{
-    transition: none!important;
+    transition: none !important;
 }
 .userinfo{
     height: 60px;
@@ -41,7 +41,7 @@ a{
     color: #fff;
     position: relative;
     top: 4px;
-    margin-left: 10px;
+    margin-right: 10px;
 }
 .layui-nav-img{
     width: 40px;

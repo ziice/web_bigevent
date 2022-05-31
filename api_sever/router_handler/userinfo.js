@@ -58,7 +58,7 @@ module.exports.updatePassword = function (req,res){
 }
 module.exports.updateAvatar = (req,res)=>{
     const sql = `UPDATE ev_users SET user_pic=? WHERE id=?`;
-    db.query(sql,[req.body.avator,req.user.id],(err,results)=>{
+    db.query(sql,[req.body.avatar,req.user.id],(err,results)=>{
         if(err){
             return res.cc(err);
         }

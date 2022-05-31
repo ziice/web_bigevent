@@ -39,10 +39,10 @@ module.exports.update_password_schema = {
     }
 }
 // dataUri() 指的是如下格式的字符串数据：data:image/png;base64,VE9PTUFOWVNFQ1JFVFM=
-const avator = joi.string().dataUri().required();
+const avatar = joi.string().dataUri().required();
 module.exports.update_avatar_schema = {
     body:{
-        avator: avator
+        avatar: avatar
     }
 }
 
