@@ -27,17 +27,46 @@ module.exports.addArticle = function (req, res) {
     })
 }
 module.exports.getArticle = function (req,res){
-    const sql = `SELECT * FROM ev_articles WHERE is_delete = 0 ORDER BY id ASC`;
-    db.query(sql,(err,results)=>{
-        if(err){
-            return res.cc(err);
-        }
-        res.send({
-            status:0,
-            message:'获取文章列表成功！',
-            data:results
+    let sql = null;
+    let data = null;
+    let data2 = null;
+    let cal_offset = (Number(req.query.pagenum)-1)*Number(req.query.pagesize);
+    // let sql2 = 'SELECT COUNT(*) FROM my_db_01.ev_articles';
+    let sql2 = null;
+    if(req.query.cate_id==='所有分类' && req.query.state==='所有状态'){
+        sql = `SELECT ea.id,ea.title,ea.pub_date,ea.state,eac.name as cate_name FROM my_db_01.ev_article_cate eac,my_db_01.ev_articles ea WHERE ea.cate_id = eac.id AND ea.is_delete = 0 ORDER BY ea.id ASC LIMIT ? OFFSET ?`;
+        sql2 = `SELECT ea.id,ea.title,ea.pub_date,ea.state,eac.name as cate_name FROM my_db_01.ev_article_cate eac,my_db_01.ev_articles ea WHERE ea.cate_id = eac.id AND ea.is_delete = 0 ORDER BY ea.id ASC`;
+        data = [Number(req.query.pagesize),cal_offset];
+    }else if(req.query.state==='所有状态'){
+        sql = `SELECT ea.id,ea.title,ea.pub_date,ea.state,eac.name as cate_name FROM my_db_01.ev_article_cate eac,my_db_01.ev_articles ea WHERE ea.cate_id = eac.id AND ea.is_delete = 0 AND ea.cate_id = ? ORDER BY ea.id ASC LIMIT ? OFFSET ?`;
+        sql2 = `SELECT ea.id,ea.title,ea.pub_date,ea.state,eac.name as cate_name FROM my_db_01.ev_article_cate eac,my_db_01.ev_articles ea WHERE ea.cate_id = eac.id AND ea.is_delete = 0 AND ea.cate_id = ? ORDER BY ea.id ASC`;
+        data = [req.query.cate_id,Number(req.query.pagesize),cal_offset];
+        data2 = [req.query.cate_id];
+    }else if(req.query.cate_id==='所有分类'){
+        sql = `SELECT ea.id,ea.title,ea.pub_date,ea.state,eac.name as cate_name FROM my_db_01.ev_article_cate eac,my_db_01.ev_articles ea WHERE ea.cate_id = eac.id AND ea.is_delete = 0 AND ea.state = ? ORDER BY ea.id ASC LIMIT ? OFFSET ?`;
+        sql2 = `SELECT ea.id,ea.title,ea.pub_date,ea.state,eac.name as cate_name FROM my_db_01.ev_article_cate eac,my_db_01.ev_articles ea WHERE ea.cate_id = eac.id AND ea.is_delete = 0 AND ea.state = ? ORDER BY ea.id ASC`;
+        data = [req.query.state,Number(req.query.pagesize),cal_offset];
+        data2 = [req.query.state];
+    }else{
+        sql = `SELECT ea.id,ea.title,ea.pub_date,ea.state,eac.name as cate_name FROM my_db_01.ev_article_cate eac,my_db_01.ev_articles ea WHERE ea.cate_id = eac.id AND ea.is_delete = 0 AND ea.cate_id = ? AND ea.state = ? ORDER BY ea.id ASC LIMIT ? OFFSET ?`;
+        sql2 = `SELECT ea.id,ea.title,ea.pub_date,ea.state,eac.name as cate_name FROM my_db_01.ev_article_cate eac,my_db_01.ev_articles ea WHERE ea.cate_id = eac.id AND ea.is_delete = 0 AND ea.cate_id = ? AND ea.state = ? ORDER BY ea.id ASC`;
+        data = [req.query.cate_id,req.query.state,Number(req.query.pagesize),cal_offset];
+        data2 = [req.query.cate_id,req.query.state];
+    }
+    db.query(sql2,data2,(err,results2)=>{
+        db.query(sql,data,(err,results)=>{
+            if(err){
+                return res.cc(err);
+            }
+            res.send({
+                status:0,
+                message:'获取文章列表成功！',
+                data:results,
+                total:results2.length
+            })
         })
     })
+
 }
 module.exports.deleteArtById = function (req,res){
     const sql = 'UPDATE ev_articles SET is_delete = 1 WHERE id=?';

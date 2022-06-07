@@ -1432,7 +1432,7 @@ db.query(sql, [req.body, req.body.Id], (err, results) => {
 
 #### 5.2.1 初始化路由模块
 
-1. 创建 `/router/article.js` 路由模块，并初始化如下的代码结构：
+1. 创建 `/router/art_cate.js` 路由模块，并初始化如下的代码结构：
 
 ```js
 // 导入 express
@@ -1460,7 +1460,7 @@ app.use('/my/article', articleRouter)
 
 #### 5.2.2 初始化路由处理函数模块
 
-1. 创建 `/router_handler/article.js` 路由处理函数模块，并初始化如下的代码结构：
+1. 创建 `/router_handler/art_cate.js` 路由处理函数模块，并初始化如下的代码结构：
 
 ```js
 // 发布新文章的处理函数
@@ -1469,7 +1469,7 @@ exports.addArticle = (req, res) => {
 }
 ```
 
-2. 修改 `/router/article.js` 中的代码如下：
+2. 修改 `/router/art_cate.js` 中的代码如下：
 
 ```js
 const express = require('express')
@@ -1496,7 +1496,7 @@ module.exports = router
 npm i multer@1.4.2
 ```
 
-2. 在 `/router_handler/article.js` 模块中导入并配置 `multer`：
+2. 在 `/router_handler/art_cate.js` 模块中导入并配置 `multer`：
 
 ```js
 // 导入解析 formdata 格式表单数据的包
@@ -1518,7 +1518,7 @@ const upload = multer({ dest: path.join(__dirname, '../uploads') })
 router.post('/add', upload.single('cover_img'), article_handler.addArticle)
 ```
 
-4. 在 `/router_handler/article.js` 模块中的 `addArticle` 处理函数中，将 `multer` 解析出来的数据进行打印：
+4. 在 `/router_handler/art_cate.js` 模块中的 `addArticle` 处理函数中，将 `multer` 解析出来的数据进行打印：
 
 ```js
 // 发布新文章的处理函数
@@ -1535,7 +1535,7 @@ exports.addArticle = (req, res) => {
 
 > 实现思路：通过 express-joi **自动验证** req.body 中的文本数据；通过 if 判断**手动验证** req.file 中的文件数据；
 
-1. 创建 `/schema/article.js` 验证规则模块，并初始化如下的代码结构：
+1. 创建 `/schema/art_cate.js` 验证规则模块，并初始化如下的代码结构：
 
 ```js
 // 导入定义验证规则的模块
@@ -1558,7 +1558,7 @@ exports.add_article_schema = {
 }
 ```
 
-2. 在 `/router/article.js` 模块中，导入需要的验证规则对象，并在路由中使用：
+2. 在 `/router/art_cate.js` 模块中，导入需要的验证规则对象，并在路由中使用：
 
 ```js
 // 导入验证数据的中间件
@@ -1573,7 +1573,7 @@ const { add_article_schema } = require('../schema/article')
 router.post('/add', upload.single('cover_img'), expressJoi(add_article_schema), article_handler.addArticle)
 ```
 
-3. 在 `/router_handler/article.js` 模块中的 `addArticle` 处理函数中，通过 `if` 判断客户端是否提交了 `封面图片`：
+3. 在 `/router_handler/art_cate.js` 模块中的 `addArticle` 处理函数中，通过 `if` 判断客户端是否提交了 `封面图片`：
 
 ```js
 // 发布新文章的处理函数
